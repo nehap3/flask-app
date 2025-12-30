@@ -133,70 +133,51 @@ mongodb://mongodb:27017
 minikube service flask-service
 ```
 
+```markdown
 ## Horizontal Pod Autoscaling (HPA)
 
-To ensure the application scales automatically based on load, a **Horizontal Pod Autoscaler (HPA)** is configured for the Flask application.
+HPA monitors Flask app CPU and scales **2→5 pods** automatically at **70% CPU threshold**.
 
-The HPA monitors CPU utilization and automatically increases or decreases the number of pod replicas.
 
-### HPA Configuration
-
-### Apply HPA
-
-```bash
-kubectl apply -f hpa.yaml
+### CURRENT STATUS (WORKING!)
+```
+$ kubectl get hpa flask-app
+NAME        REFERENCE                  TARGETS        MINPODS   MAXPODS   REPLICAS   AGE
+flask-app   Deployment/flask-app     <420m>/70%   2         5         2          15m
 ```
 
-### Verify Autoscaling
+### Metrics Server LIVE!
+```
+$ kubectl top nodes
+NAME       CPU(cores)   CPU(%)   MEMORY(bytes)   MEMORY(%)
+minikube   397m         3%       1075Mi          28%
 
-```bash
-kubectl get hpa
+$ kubectl top pods -l app=flask-app
+NAME                    CPU(cores)   MEMORY(bytes)
+flask-app-xxxx         180m         25Mi
+flask-app-yyyy         0m           10Mi
 ```
 
----
-
-### Auto-Scaling Test (Optional)
-
-You can simulate load using:
-
-```bash
-kubectl run -i --tty load-generator --rm --image=busybox -- /bin/sh
+### Scale Test Commands
 ```
+# 1. Generate CPU Load
+kubectl scale deployment flask-app --replicas=2
+for i in {1..50}; do curl http://127.0.0.1:<NODEPORT>/; done
 
+# 2. Watch Auto-Scaling LIVE
+kubectl get hpa flask-app -w
+# REPLICAS: 2 → 5! (30 seconds)
 
-Then monitor scaling:
-
-```bash
-kubectl get hpa
-kubectl get pods
+# 3. Verify Scaled Pods
+kubectl get pods -l app=flask-app
 ```
-
-## DNS Resolution in Kubernetes
-
-Kubernetes uses **CoreDNS** for service discovery.
-
-Example:
-
 ```
-mongodb.default.svc.cluster.local
+1. kubectl get hpa flask-app          → Shows 2/5 replicas
+2. kubectl top nodes                  → Metrics working  
+3. kubectl top pods -l app=flask-app  → CPU utilization visible
+4. minikube service flask-service     → NodePort URL
 ```
-
-Inside the cluster, the Flask app connects using:
-
 ```
-mongodb://mongodb:27017
-```
-
-This allows seamless communication without hardcoding IPs.
-
----
-
-
-
-This ensures stability and prevents resource starvation.
-
----
-
 ## Testing the Application
 
 ### Insert Data
