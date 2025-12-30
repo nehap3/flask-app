@@ -1,5 +1,4 @@
-from flask import Flask, request, jsonify
-from flask import render_template
+from flask import Flask, request, jsonify, render_template
 from pymongo import MongoClient
 import os
 
@@ -18,11 +17,12 @@ def home():
 def insert_data():
     data = request.json
     collection.insert_one(data)
-    return {"message": "Data inserted"}, 201
+    return jsonify({"message": "Data inserted"}), 201
 
 @app.route("/data", methods=["GET"])
 def get_data():
-    return list(collection.find({}, {"_id": 0}))
+    data = list(collection.find({}, {"_id": 0}))
+    return jsonify(data)
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
