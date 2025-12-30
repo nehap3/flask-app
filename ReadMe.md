@@ -178,15 +178,8 @@ Then monitor scaling:
 
 ```bash
 kubectl get hpa
-![alt text](image-1.png)
-```
-
-```bash
 kubectl get pods
-![alt text](image-2.png)
 ```
-
-
 
 ## DNS Resolution in Kubernetes
 
