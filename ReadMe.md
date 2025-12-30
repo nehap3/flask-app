@@ -159,7 +159,7 @@ This ensures stability and prevents resource starvation.
 
 ---
 
-## 🧪 Testing the Application
+## Testing the Application
 
 ### Insert Data
 
