@@ -1,4 +1,4 @@
-# Flask + MongoDB on Kubernetes
+# Flask + MongoDB on Kubernetes (Minikube)
 
 ## Project Overview
 
@@ -8,7 +8,7 @@ The application exposes REST APIs to insert and retrieve data from MongoDB.
 
 ---
 
-## Technology Stack
+## Tech Stack
 
 * Python (Flask)
 * MongoDB
@@ -40,7 +40,7 @@ flask-mongo-app/
 
 ---
 
-## Part 1: Flask Application Setup
+## Part 1 – Flask Application Setup
 
 ### 1. Create Virtual Environment
 
@@ -55,17 +55,13 @@ source venv/bin/activate   # Windows: venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-### 3. Flask Application Details
+### 3. Flask Application
 
-Endpoints:
+* `/` → returns welcome message
+* `/data` → POST inserts data
+* `/data` → GET retrieves stored data
 
-* `/` → Returns welcome message with timestamp
-* `/data` →
-
-  * POST: Insert data into MongoDB
-  * GET: Retrieve stored data
-
-MongoDB connection string used:
+MongoDB connection string:
 
 ```
 mongodb://mongodb:27017
@@ -75,7 +71,7 @@ mongodb://mongodb:27017
 
 ## Docker Setup
 
-### Build Docker Image
+### Build Image
 
 ```bash
 docker build -t <docker-username>/flask-mongo-app .
@@ -97,13 +93,13 @@ docker push <docker-username>/flask-mongo-app
 minikube start
 ```
 
-### Deploy Kubernetes Resources
+### Apply Kubernetes Manifests
 
 ```bash
 kubectl apply -f k8s/
 ```
 
-### Verify Deployment
+### Verify Pods
 
 ```bash
 kubectl get pods
@@ -115,8 +111,7 @@ kubectl get pods
 
 * MongoDB runs as a StatefulSet
 * PersistentVolume and PersistentVolumeClaim ensure data persistence
-* Authentication handled via Kubernetes Secrets
-* Accessible inside cluster at:
+* MongoDB is accessible internally via:
 
 ```
 mongodb://mongodb:27017
@@ -124,10 +119,12 @@ mongodb://mongodb:27017
 
 ---
 
-## Service Configuration
+## Services & Networking
 
-* Flask Service type: NodePort
-* Application accessible using:
+### Flask Service
+
+* Type: NodePort
+* Access using:
 
 ```bash
 minikube service flask-service
@@ -135,13 +132,32 @@ minikube service flask-service
 
 ---
 
-## Horizontal Pod Autoscaler (HPA)
+## Horizontal Pod Autoscaling (HPA)
 
-HPA automatically scales the Flask application based on CPU usage.
+The application automatically scales based on CPU usage.
 
 ### HPA Configuration
-```bash
-kubectl get hpa
+
+### HPA Status
+
+```
+kubectl get hpa flask-app
+```
+
+Example Output:
+
+```
+NAME        REFERENCE              TARGETS        MINPODS   MAXPODS   REPLICAS
+flask-app   Deployment/flask-app   420m/70%       2         5         2
+```
+
+---
+
+## Metrics Verification
+
+```
+kubectl top nodes
+kubectl top pods -l app=flask-app
 ```
 
 ---
@@ -156,7 +172,7 @@ curl -X POST http://<NODE-IP>:<PORT>/data \
 -d '{"name":"Neha","role":"DevOps Intern"}'
 ```
 
-### Fetch Data
+### Retrieve Data
 
 ```bash
 curl http://<NODE-IP>:<PORT>/data
