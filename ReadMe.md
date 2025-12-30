@@ -133,16 +133,6 @@ mongodb://mongodb:27017
 minikube service flask-service
 ```
 
-Perfect 👍
-Tumhara README almost **complete** hai — bas **HPA (Horizontal Pod Autoscaler)** ka section missing hai.
-Main tumhe **exact ready-to-paste content** de raha hoon jo tum README me add kar sakti ho 👇
-
----
-
-## ✅ Add This Section to Your README (Below “Services” or Before “Testing”)
-
----
-
 ## Horizontal Pod Autoscaling (HPA)
 
 To ensure the application scales automatically based on load, a **Horizontal Pod Autoscaler (HPA)** is configured for the Flask application.
