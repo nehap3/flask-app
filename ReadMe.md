@@ -212,29 +212,3 @@ curl -X POST http://<NODE-IP>:<PORT>/data \
 ```bash
 curl http://<NODE-IP>:<PORT>/data
 ```
-
----
-
-## What This Project Demonstrates
-
-✔ Flask + MongoDB integration
-✔ Kubernetes Deployment & Services
-✔ StatefulSet with Persistent Volume
-✔ Docker Image Creation
-✔ Kubernetes DNS & Networking
-✔ Production-ready architecture
-
----
-
-## Final Notes
-
-This project fulfills all requirements of the internship assignment including:
-
-* Application deployment
-* Containerization
-* Kubernetes orchestration
-* Persistent storage
-* Scaling
-* DNS resolution
-
----
