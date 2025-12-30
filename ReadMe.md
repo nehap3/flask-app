@@ -133,6 +133,61 @@ mongodb://mongodb:27017
 minikube service flask-service
 ```
 
+Perfect 👍
+Tumhara README almost **complete** hai — bas **HPA (Horizontal Pod Autoscaler)** ka section missing hai.
+Main tumhe **exact ready-to-paste content** de raha hoon jo tum README me add kar sakti ho 👇
+
+---
+
+## ✅ Add This Section to Your README (Below “Services” or Before “Testing”)
+
+---
+
+## Horizontal Pod Autoscaling (HPA)
+
+To ensure the application scales automatically based on load, a **Horizontal Pod Autoscaler (HPA)** is configured for the Flask application.
+
+The HPA monitors CPU utilization and automatically increases or decreases the number of pod replicas.
+
+### HPA Configuration
+
+### Apply HPA
+
+```bash
+kubectl apply -f hpa.yaml
+```
+
+### Verify Autoscaling
+
+```bash
+kubectl get hpa
+```
+
+---
+
+### Auto-Scaling Test (Optional)
+
+You can simulate load using:
+
+```bash
+kubectl run -i --tty load-generator --rm --image=busybox -- /bin/sh
+```
+
+
+Then monitor scaling:
+
+```bash
+kubectl get hpa
+![alt text](image-1.png)
+```
+
+```bash
+kubectl get pods
+![alt text](image-2.png)
+```
+
+
+
 ## DNS Resolution in Kubernetes
 
 Kubernetes uses **CoreDNS** for service discovery.
